@@ -15,6 +15,7 @@ Uso:
     streamlit run app.py
 """
 
+import base64
 import getpass
 import html
 import io
@@ -40,6 +41,14 @@ from src.uf_rules import obter_regra_uf
 ARQUIVO_SAIDA = "controle_difal.xlsx"
 PASTA_GUIAS = Path("guias")
 PASTA_GUIAS.mkdir(exist_ok=True)
+LOGO_PATH = Path("assets/logo.png")
+
+
+def logo_base64():
+    """Le a logo do disco e devolve como data URI base64 (embutida no HTML da sidebar)."""
+    if not LOGO_PATH.exists():
+        return None
+    return base64.b64encode(LOGO_PATH.read_bytes()).decode("ascii")
 
 CSS_CUSTOMIZADO = """
 <style>
@@ -52,10 +61,11 @@ section[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid 
 /* ---- Marca (logo + titulo) ---- */
 .marca-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
 .marca-quadrado {
-    width: 30px; height: 30px; border-radius: 7px; background: #14548c;
+    width: 30px; height: 30px; border-radius: 7px; background: #000;
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 12px; font-weight: 700; letter-spacing: -0.02em; flex-shrink: 0;
+    overflow: hidden; flex-shrink: 0;
 }
+.marca-quadrado img { width: 100%; height: 100%; object-fit: cover; }
 .marca-titulo { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; color: #23241f; }
 .marca-subtitulo { font-size: 11px; color: #82837b; line-height: 1.3; margin-top: 1px; }
 
@@ -432,10 +442,15 @@ if "linhas" not in st.session_state:
 
 # ---------------------------------------------------------------- Sidebar
 with st.sidebar:
+    _logo_b64 = logo_base64()
+    _logo_html = (
+        f'<img src="data:image/png;base64,{_logo_b64}" alt="Logo">'
+        if _logo_b64 else "DB"
+    )
     st.markdown(
-        """
+        f"""
         <div class="marca-row">
-          <div class="marca-quadrado">DB</div>
+          <div class="marca-quadrado">{_logo_html}</div>
           <div>
             <div class="marca-titulo">DIFAL Bot Sebem</div>
             <div class="marca-subtitulo">Controle fiscal interno</div>
