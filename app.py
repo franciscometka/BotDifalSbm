@@ -54,6 +54,13 @@ CSS_CUSTOMIZADO = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
+/*
+Esse design e fixo em tema claro (cores do handoff nao tem variante escura).
+Sem isso, o "forcar tema escuro" do Chrome no Android reinterpreta as cores
+do site com um algoritmo de inversao/heuristica, deixando tudo com um tom
+alaranjado/marrom estranho - isso avisa o navegador pra nao fazer isso aqui.
+*/
+:root { color-scheme: light only; }
 html, body, [class*="css"] { font-family: "IBM Plex Sans", Helvetica, Arial, sans-serif; }
 .stApp { background: #f4f4f2; }
 section[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid #e2e2dd; }
