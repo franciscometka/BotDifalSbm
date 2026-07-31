@@ -430,7 +430,11 @@ def linha_expander(linha, indice):
             )
 
 
-st.set_page_config(page_title="DIFAL Bot Sebem", page_icon="📊", layout="wide")
+st.set_page_config(
+    page_title="DIFAL Bot Sebem",
+    page_icon=str(LOGO_PATH) if LOGO_PATH.exists() else "📊",
+    layout="wide",
+)
 st.markdown(CSS_CUSTOMIZADO, unsafe_allow_html=True)
 
 if "linhas" not in st.session_state:
