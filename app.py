@@ -148,12 +148,59 @@ section[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid 
 .det-valor { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: #23241f; }
 .det-obs { font-size: 11.5px; color: #82837b; line-height: 1.5; }
 
-/* ---- Dropzone de upload ---- */
+/* ---- Dropzone de upload: compacta e discreta ---- */
 [data-testid="stFileUploaderDropzone"] {
     border: 1px dashed #cfcfc7 !important;
     background: #fafaf8 !important;
     border-radius: 8px !important;
+    padding: 8px !important;
+    min-height: unset !important;
 }
+[data-testid="stFileUploaderDropzone"] > div { gap: 6px !important; }
+
+/* esconde o texto tecnico do componente nativo (ingles, "200MB per file...") */
+[data-testid="stFileUploaderDropzoneInstructions"] { display: none !important; }
+
+/* botao "Upload" discreto, no lugar do botao grande padrao */
+[data-testid="stFileUploaderDropzone"] button[data-testid="stBaseButton-secondary"] {
+    border: 1px solid #cfcfc7 !important;
+    background: #ffffff !important;
+    color: #3c3d36 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 5px 12px !important;
+    min-height: unset !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+[data-testid="stFileUploaderDropzone"] button[data-testid="stBaseButton-secondary"]:hover {
+    border-color: #14548c !important;
+    color: #14548c !important;
+    background: #f5f8fb !important;
+}
+
+/* fila de arquivos: cartao mais discreto */
+[data-testid="stFileChip"] {
+    border: 1px solid #e9e9e3 !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+}
+[data-testid="stFileChipName"] { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #3c3d36; }
+
+/* botao "Processar XMLs": um pouco mais de profundidade no hover */
+div[data-testid="stButton"] button[data-testid="stBaseButton-primary"] {
+    box-shadow: 0 1px 2px rgba(20, 84, 140, 0.15);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+div[data-testid="stButton"] button[data-testid="stBaseButton-primary"]:not(:disabled):hover {
+    box-shadow: 0 3px 8px rgba(20, 84, 140, 0.28);
+    transform: translateY(-1px);
+}
+
+/* respiro um pouco mais enxuto entre os blocos da sidebar */
+section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"],
+section[data-testid="stSidebar"] .stFileUploader { margin-bottom: 2px; }
 </style>
 """
 
