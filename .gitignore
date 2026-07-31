@@ -1,0 +1,19 @@
+# Segredos - nunca versionar
+.env
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Dados locais
+xmls/*.xml
+guias/*.pdf
+controle_difal.xlsx
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Zip redundante (ja extraido em docs/gnre_referencia_oficial/)
+Manual_de_Integracao_Contribuintes_GNRE_v2.15.zip
