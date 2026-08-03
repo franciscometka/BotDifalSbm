@@ -63,31 +63,34 @@ alaranjado/marrom estranho - isso avisa o navegador pra nao fazer isso aqui.
 :root { color-scheme: light only; }
 html, body, [class*="css"] { font-family: "IBM Plex Sans", Helvetica, Arial, sans-serif; }
 .stApp { background: #f4f4f2; }
-section[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid #e2e2dd; }
+section[data-testid="stSidebar"] { background: #fbfbfa; border-right: 1px solid #e2e2dd; }
+section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"] > div {
+    background: #ffffff;
+}
 
 /* ---- Marca (logo + titulo) ---- */
-.marca-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+.marca-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px 0; }
 .marca-quadrado {
-    width: 30px; height: 30px; border-radius: 7px; background: #000;
+    width: 34px; height: 34px; border-radius: 8px; background: #000;
     display: flex; align-items: center; justify-content: center;
     overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 .marca-quadrado img { width: 100%; height: 100%; object-fit: cover; }
-.marca-titulo { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; color: #23241f; }
-.marca-subtitulo { font-size: 11px; color: #82837b; line-height: 1.3; margin-top: 1px; }
+.marca-titulo { font-size: 14.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; color: #1c1d19; }
+.marca-subtitulo { font-size: 11.5px; color: #6b7280; line-height: 1.3; margin-top: 1px; }
 
 .rotulo-secao {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
-    color: #82837b; margin: 4px 0 2px 0;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #55575e; margin: 0 0 8px 0;
 }
-.nota-rodape { font-size: 10.5px; color: #92938a; line-height: 1.4; margin-top: 4px; }
+.nota-rodape { font-size: 10.5px; color: #9599a2; line-height: 1.4; margin-top: 6px; }
 
 /* ---- Ultimo lote (sidebar) ---- */
-.ultimo-lote { border-top: 1px solid #e9e9e3; padding-top: 14px; margin-top: 10px; }
-.ultimo-lote-linha { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
-.ultimo-lote-linha .rotulo { color: #6f7068; }
+.ultimo-lote-linha { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+.ultimo-lote-linha .rotulo { color: #6b7280; }
 .ultimo-lote-linha .valor { font-family: "IBM Plex Mono", monospace; color: #23241f; }
-.ultimo-lote-id { font-size: 11px; color: #92938a; line-height: 1.4; margin-top: 4px; }
+.ultimo-lote-id { font-size: 10.5px; color: #9599a2; line-height: 1.4; margin-top: 6px; }
 
 /* ---- Cabecalho principal ---- */
 .cabecalho-titulo { font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: #23241f; margin: 0; }
@@ -198,9 +201,12 @@ div[data-testid="stButton"] button[data-testid="stBaseButton-primary"]:not(:disa
     transform: translateY(-1px);
 }
 
-/* respiro um pouco mais enxuto entre os blocos da sidebar */
-section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"],
-section[data-testid="stSidebar"] .stFileUploader { margin-bottom: 2px; }
+/* cartoes com borda na sidebar (upload / ultimo lote): respiro entre eles */
+section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"] {
+    margin-bottom: 14px;
+    border-radius: 10px !important;
+    border-color: #e2e2dd !important;
+}
 </style>
 """
 
@@ -518,37 +524,23 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="rotulo-secao">Entrada de arquivos</div>', unsafe_allow_html=True)
-    arquivos_upload = st.file_uploader(
-        "Arraste os XMLs de NF-e aqui ou clique para selecionar",
-        type=["xml"],
-        accept_multiple_files=True,
-        label_visibility="visible",
-    )
+    with st.container(border=True):
+        st.markdown('<div class="rotulo-secao">Entrada de arquivos</div>', unsafe_allow_html=True)
+        arquivos_upload = st.file_uploader(
+            "Arraste os XMLs de NF-e aqui ou clique para selecionar",
+            type=["xml"],
+            accept_multiple_files=True,
+            label_visibility="visible",
+        )
 
-    processar_clicado = st.button(
-        "Processar XMLs",
-        type="primary",
-        use_container_width=True,
-        disabled=not arquivos_upload,
-    )
-    st.markdown(
-        '<div class="nota-rodape">Somente NF-e de saída interestadual são avaliadas.</div>',
-        unsafe_allow_html=True,
-    )
-
-    if st.session_state.lote_info:
-        info = st.session_state.lote_info
+        processar_clicado = st.button(
+            "Processar XMLs",
+            type="primary",
+            use_container_width=True,
+            disabled=not arquivos_upload,
+        )
         st.markdown(
-            f"""
-            <div class="ultimo-lote">
-              <div class="rotulo-secao" style="margin-top:0">Último lote</div>
-              <div class="ultimo-lote-linha"><span class="rotulo">Arquivos</span><span class="valor">{info['arquivos']}</span></div>
-              <div class="ultimo-lote-linha"><span class="rotulo">Processado às</span><span class="valor">{info['horario']}</span></div>
-              <div class="ultimo-lote-linha"><span class="rotulo">Data</span><span class="valor">{info['data']}</span></div>
-              <div class="ultimo-lote-id">Lote #{info['lote_id']} · usuário {info['usuario']}</div>
-            </div>
-            """,
+            '<div class="nota-rodape">Somente NF-e de saída interestadual são avaliadas.</div>',
             unsafe_allow_html=True,
         )
 
@@ -572,6 +564,23 @@ if processar_clicado and arquivos_upload:
         "usuario": getpass.getuser(),
         "competencia": agora.strftime("%m/%Y"),
     }
+
+# "Ultimo lote": renderizado depois do processamento (nao junto com o resto da
+# sidebar acima) pra aparecer ja na primeira vez, sem precisar de mais um rerun.
+if st.session_state.lote_info:
+    info = st.session_state.lote_info
+    with st.sidebar:
+        with st.container(border=True):
+            st.markdown(
+                f"""
+                <div class="rotulo-secao">Último lote</div>
+                <div class="ultimo-lote-linha"><span class="rotulo">Arquivos</span><span class="valor">{info['arquivos']}</span></div>
+                <div class="ultimo-lote-linha"><span class="rotulo">Processado às</span><span class="valor">{info['horario']}</span></div>
+                <div class="ultimo-lote-linha"><span class="rotulo">Data</span><span class="valor">{info['data']}</span></div>
+                <div class="ultimo-lote-id">Lote #{info['lote_id']} · usuário {info['usuario']}</div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 # ---------------------------------------------------------------- Main
 if st.session_state.linhas is not None:
